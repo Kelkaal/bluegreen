@@ -3,7 +3,7 @@ import requests
 import time
 import subprocess
 
-print("🎯 FRESH TEST FOR ALERTS")
+print("FRESH TEST FOR ALERTS")
 
 print("1. Waiting 35 seconds for cooldown to reset...")
 time.sleep(35)
@@ -34,4 +34,4 @@ for i in range(25):
 print("5. Restarting blue...")
 subprocess.run(["docker-compose", "start", "app_blue"])
 
-print("✅ Test complete - check watcher logs and Slack for alerts!")
+print("Test complete - check watcher logs and Slack for alerts!")
