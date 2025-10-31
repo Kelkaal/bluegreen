@@ -12,7 +12,8 @@ The system automatically switched traffic from one color to another (like from B
 - The load balancer detected issues and switched to the backup pool
 - This is the system protecting itself!
 
-**What To Check First:**
+###  See Which Containers Are Running
+
 ```bash
 # See which containers are running
 docker-compose ps
@@ -20,47 +21,49 @@ docker-compose ps
 # Check the logs of the pool that failed
 docker-compose logs app_blue --tail=20
 docker-compose logs app_green --tail=20
-Quick Fixes:
+````
+##  Quick Fixes
 
-Restart the broken pool: docker-compose restart app_blue (or app_green)
+If one of your app pools stops working, you can quickly restart it and check if it’s healthy again.
 
-Check if it's back: curl -H "X-App-Pool: blue" http://localhost:8080/
+###  Restart the broken pool
+```bash
+docker-compose restart app_blue   # or app_green
+````
+###  Check if it's back
 
-The system will automatically switch back when healthy
+```bash
+curl -H "X-App-Pool: blue" http://localhost:8080/
+````
+## "High Error Rate" Alert
 
-"High Error Rate" Alert
-=======================
-What Happened:
-More than 2% of recent requests are failing with server errors.
+**What Happened:**
+More than **2%** of recent requests are failing with server errors.
 
-Why This Matters:
+**Why This Matters:**
+- Users are seeing error pages instead of your app.  
+- This could mean your app is struggling or a dependency is down.
+````
+### What To Check
 
-Users are seeing error pages instead of your app
-
-This could mean your app is struggling or a dependency is down
-
-What To Check:
-==============
-
-bash
+```bash
 # See recent errors in nginx
 docker-compose logs nginx --tail=10 | grep "50x"
 
 # Check both app logs for clues
 docker-compose logs app_blue app_green --tail=15
-Quick Actions:
+````
+###  Quick Actions
 
-Check if it's a temporary spike (wait 2 minutes)
+- Check if it's a temporary spike (wait 2 minutes)
+- If errors continue, restart the problematic pool
+- Monitor if error rate drops below 2%
+````
+### Planned Maintenance
 
-If errors continue, restart the problematic pool
-
-Monitor if error rate drops below 2%
-
-Planned Maintenance
-===================
 To temporarily stop alerts during updates:
 
-bash
+```bash
 # Turn off alerting
 docker-compose stop alert_watcher
 
@@ -68,3 +71,4 @@ docker-compose stop alert_watcher
 
 # Turn alerting back on
 docker-compose start alert_watcher
+````
