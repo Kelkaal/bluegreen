@@ -57,7 +57,7 @@ python3 test_traffic.py
 # Watch alerts in real-time
 docker-compose logs alert_watcher -f
 ````
-#### 🧾 Check Application Logs
+####  Check Application Logs
 
 ```bash
 # See nginx access logs
@@ -116,7 +116,7 @@ Edit these in your `.env` file:
 ERROR_RATE_THRESHOLD=2.0     # Percentage of errors that trigger alerts  
 ALERT_COOLDOWN_SEC=300       # Seconds between repeat alerts
 ````
-## ⚙️ How It Works
+##  How It Works
 
 - **NGINX** routes traffic between blue/green pools  
 - **Python Watcher** reads logs and detects problems  
@@ -141,7 +141,7 @@ ALERT_COOLDOWN_SEC=300       # Seconds between repeat alerts
 - **Python** – log monitoring and Slack alerting  
 - **Slack Webhooks** – real-time deployment notifications
 ````
-## 📁 Project Structure
+## Project Structure
 
 ````
 blend/
