@@ -3,7 +3,7 @@ import requests
 import time
 import subprocess
 
-print("🔀 TESTING FAILOVER...")
+print(" TESTING FAILOVER...")
 
 # Generate some initial traffic
 print("1. Initial traffic to blue...")
@@ -30,4 +30,4 @@ for i in range(15):
 print("4. Restarting blue...")
 subprocess.run(["docker-compose", "start", "app_blue"])
 
-print("✅ Failover test complete - check watcher logs for alerts!")
+print("Failover test complete - check watcher logs for alerts!")
