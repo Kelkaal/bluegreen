@@ -5,7 +5,7 @@ import requests
 import sys
 from collections import deque
 
-print("🚀 WATCHER STARTED - TEST MODE (30s cooldown)")
+print("WATCHER STARTED - TEST MODE (30s cooldown)")
 sys.stdout.flush()
 
 class Watcher:
@@ -22,7 +22,7 @@ class Watcher:
         self.last_error_alert = 0
 
         print(f"Config: threshold={self.error_threshold}%, window={self.window_size}, cooldown={self.cooldown_sec}s (TEST MODE)")
-        print(f"Slack: {'✅ SET' if self.slack_webhook else '❌ NOT SET'}")
+        print(f"Slack: {' SET' if self.slack_webhook else ' NOT SET'}")
         sys.stdout.flush()
 
     def parse_line(self, line):
@@ -57,12 +57,12 @@ class Watcher:
         return True
 
     def send_alert(self, title, message):
-        print(f"🚨 ALERT: {title}")
-        print(f"   📝 {message}")
+        print(f"ALERT: {title}")
+        print(f"    {message}")
         sys.stdout.flush()
         
         if not self.slack_webhook:
-            print("   ℹ️  Slack not configured - alert logged only")
+            print("     Slack not configured - alert logged only")
             sys.stdout.flush()
             return
 
@@ -77,26 +77,26 @@ class Watcher:
         try:
             response = requests.post(self.slack_webhook, json=payload, timeout=10)
             if response.status_code == 200:
-                print("   ✅ Alert sent to Slack")
+                print("    Alert sent to Slack")
             else:
-                print(f"   ❌ Slack error: {response.status_code}")
+                print(f"    Slack error: {response.status_code}")
             sys.stdout.flush()
         except Exception as e:
-            print(f"   ❌ Failed to send to Slack: {e}")
+            print(f"    Failed to send to Slack: {e}")
             sys.stdout.flush()
 
     def watch(self):
         log_file = "/var/log/nginx/access.log"
-        print(f"👀 Watching: {log_file}")
+        print(f" Watching: {log_file}")
         sys.stdout.flush()
 
         # Wait for file to exist
         while not os.path.exists(log_file):
-            print("⏳ Waiting for log file...")
+            print(" Waiting for log file...")
             sys.stdout.flush()
             time.sleep(5)
 
-        print("✅ Log file found, starting monitor...")
+        print(" Log file found, starting monitor...")
         sys.stdout.flush()
 
         with open(log_file, 'r') as f:
@@ -115,7 +115,7 @@ class Watcher:
         pool = data.get('pool', 'unknown')
         status = data.get('status', '')
 
-        print(f"📝 {pool} -> {status}")
+        print(f" {pool} -> {status}")
         sys.stdout.flush()
 
         # Track request
@@ -124,13 +124,13 @@ class Watcher:
         # Check failover
         if (self.last_pool and pool != self.last_pool and
             pool in ['blue', 'green'] and self.last_pool in ['blue', 'green']):
-            print(f"🔄 FAILOVER DETECTED: {self.last_pool} -> {pool}")
+            print(f" FAILOVER DETECTED: {self.last_pool} -> {pool}")
             sys.stdout.flush()
             if self.should_alert_failover():
-                print(f"   🚨 SENDING FAILOVER ALERT")
+                print(f"    SENDING FAILOVER ALERT")
                 sys.stdout.flush()
                 self.send_alert(
-                    "🚨 Failover Detected",
+                    " Failover Detected",
                     f"Traffic automatically switched from *{self.last_pool}* to *{pool}* pool.\n\nThis indicates the primary pool may be experiencing issues.\n\n*Timestamp:* {time.strftime('%Y-%m-%d %H:%M:%S UTC')}"
                 )
         self.last_pool = pool
@@ -138,13 +138,13 @@ class Watcher:
         # Check error rate
         if len(self.requests) >= 20 and len(self.requests) % 10 == 0:
             error_rate = self.calculate_errors()
-            print(f"📊 Current error rate: {error_rate:.1f}% (threshold: {self.error_threshold}%)")
+            print(f" Current error rate: {error_rate:.1f}% (threshold: {self.error_threshold}%)")
             sys.stdout.flush()
             if error_rate > self.error_threshold and self.should_alert_error():
-                print(f"🚨 HIGH ERROR RATE DETECTED: {error_rate:.1f}%")
+                print(f" HIGH ERROR RATE DETECTED: {error_rate:.1f}%")
                 sys.stdout.flush()
                 self.send_alert(
-                    "📊 High Error Rate Alert",
+                    " High Error Rate Alert",
                     f"Error rate has exceeded the threshold!\n\n*Current rate:* {error_rate:.1f}%\n*Threshold:* {self.error_threshold}%\n*Sample size:* {len(self.requests)} requests\n*Timestamp:* {time.strftime('%Y-%m-%d %H:%M:%S UTC')}"
                 )
 
