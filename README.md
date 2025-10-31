@@ -49,7 +49,7 @@ python3 test_failover.py
 # This generates traffic to test error monitoring
 python3 test_traffic.py
 ````
-### 👀 Watching What's Happening
+###  Watching What's Happening
 
 #### See Live Alerts
 
