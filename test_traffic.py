@@ -3,7 +3,7 @@ import requests
 import time
 
 def test_traffic():
-    print("🚀 Testing traffic...")
+    print("Testing traffic...")
     
     # Test both pools
     for pool in ['blue', 'green']:
@@ -13,14 +13,14 @@ def test_traffic():
                 headers={'X-App-Pool': pool},
                 timeout=5
             )
-            print(f"✅ {pool}: {r.status_code}")
+            print(f"{pool}: {r.status_code}")
             print(f"   Headers - Pool: {r.headers.get('X-App-Pool')}")
             print(f"   Headers - Release: {r.headers.get('X-Release-Id')}")
         except Exception as e:
-            print(f"❌ {pool}: {e}")
+            print(f"{pool}: {e}")
 
 def generate_traffic():
-    print("🚀 Generating traffic for alerts...")
+    print("Generating traffic for alerts...")
     for i in range(30):
         pool = 'blue' if i % 2 == 0 else 'green'
         try:
